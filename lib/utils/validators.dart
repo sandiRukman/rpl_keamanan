@@ -1,11 +1,6 @@
 /// Kumpulan fungsi validasi dan sanitasi input.
-///
-/// Class ini menyediakan method statis untuk memvalidasi input
-/// pengguna dan membersihkan karakter berbahaya.
 class Validators {
   /// Memvalidasi format email.
-  ///
-  /// Mengembalikan `true` jika [email] memiliki format yang valid.
   static bool isValidEmail(String email) {
     final regex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
     return regex.hasMatch(email);
@@ -22,22 +17,17 @@ class Validators {
     return length >= min && length <= max;
   }
 
-  /// Membersihkan input dari karakter berbahaya.
-  ///
-  /// Mengganti karakter `<`, `>`, `"`, dan `'` dengan HTML entities
-  /// untuk mencegah XSS.
+  /// Membersihkan input dari karakter berbahaya (XSS).
   static String sanitize(String input) {
     return input
-        .replaceAll('<', '<')
-        .replaceAll('>', '>')
-        .replaceAll('"', '"')
-        .replaceAll("'", "'")
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;')
         .trim();
   }
 
   /// Memvalidasi dan membersihkan input teks.
-  ///
-  /// Mengembalikan pesan error jika tidak valid, atau `null` jika valid.
   static String? validateText(
     String? value, {
     String fieldName = 'Field',
@@ -64,7 +54,7 @@ class Validators {
     return null;
   }
 
-    /// Memvalidasi nomor telepon (hanya angka, 10-13 digit).
+  /// Memvalidasi nomor telepon (hanya angka, 10-13 digit).
   static bool isValidPhone(String phone) {
     final regex = RegExp(r'^[0-9]{10,13}$');
     return regex.hasMatch(phone.trim());
@@ -110,8 +100,7 @@ class Validators {
       return 'Password tidak boleh kosong';
     }
     if (!isValidPassword(value)) {
-      return 'Password minimal 8 karakter dan harus mengandung '
-          'huruf kapital, angka, dan simbol';
+      return 'Password minimal 8 karakter dan harus mengandung huruf kapital, angka, dan simbol';
     }
     return null;
   }
